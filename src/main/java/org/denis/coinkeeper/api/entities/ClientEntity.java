@@ -12,10 +12,10 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table
-public class Client {
+@Table(name = "client")
+public class ClientEntity {
 
-    @Column(name = "client_id") @Id
+    @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
     private Long clientId;
 
@@ -27,16 +27,17 @@ public class Client {
 
     @OneToOne(cascade = {CascadeType.ALL})
     @JoinColumn(name = "currency_id",nullable = false)
-    private Currency currency;
+    private CurrencyEntity currency;
 
     @Builder.Default
     @OneToMany
-    @JoinColumn(name = "id",nullable = false)
-    private List<Profit> profitList = new ArrayList<>();
+    //referencedColumnName - указываем название поля в java, а если есть @Column, то что внутри
+    @JoinColumn(name = "client_id",referencedColumnName = "clientId", nullable = false)
+    private List<ProfitEntity> profitEntityList = new ArrayList<>();
 
     @Builder.Default
     @OneToMany
-    @JoinColumn(name = "id",nullable = false)
-    private List<Expenses> expensesList = new ArrayList<>();
+    @JoinColumn(name = "client_id",referencedColumnName = "clientId",nullable = false)
+    private List<ExpensesEntity> expensesList = new ArrayList<>();
 
 }

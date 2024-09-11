@@ -9,8 +9,8 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table
-public class Currency {
+@Table(name = "currency")
+public class CurrencyEntity {
 
     @Column(name = "currency_id") @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

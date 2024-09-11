@@ -11,12 +11,11 @@ import java.time.Instant;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table
-public class Profit {
+@Table(name = "profit")
+public class ProfitEntity {
 
-    @Column @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private Long id;
+    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    private Long profitId;
 
     @Column
     private String category;
