@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: coinkeeper
+
+
+  autoconfigure:
+    exclude: org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+
+
+  datasource:
+    username: ${LOGIN_BD}
+    password: ${PASS_BD}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
