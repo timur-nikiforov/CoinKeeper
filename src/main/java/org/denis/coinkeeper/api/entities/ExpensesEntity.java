@@ -14,7 +14,7 @@ import java.time.Instant;
 @Table(name = "expenses")
 public class ExpensesEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long expensesId;
 
     @Column

@@ -16,7 +16,7 @@ import java.util.List;
 public class ClientEntity {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long clientId;
 
     @Column
@@ -39,5 +39,9 @@ public class ClientEntity {
     @OneToMany
     @JoinColumn(name = "client_id",referencedColumnName = "clientId",nullable = false)
     private List<ExpensesEntity> expensesList = new ArrayList<>();
+
+//    @OneToOne
+//    @JoinColumn(name = "user", referencedColumnName = "userId")
+//    private UserEntity user;
 
 }

@@ -13,7 +13,7 @@ import lombok.*;
 public class CurrencyEntity {
 
     @Column(name = "currency_id") @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long currencyId;
 
     @Column(name = "currency_name")

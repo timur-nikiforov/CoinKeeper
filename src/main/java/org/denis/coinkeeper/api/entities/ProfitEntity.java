@@ -14,7 +14,7 @@ import java.time.Instant;
 @Table(name = "profit")
 public class ProfitEntity {
 
-    @Id @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long profitId;
 
     @Column
