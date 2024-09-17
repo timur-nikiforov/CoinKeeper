@@ -5,12 +5,15 @@ import org.denis.coinkeeper.api.entities.UserEntity;
 import org.springframework.stereotype.Component;
 
 @Component
+// По сути это не фабрика, а преобразователь в Dto
 public class UserDtoFactory {
+
     public UserDto makeUserDto(UserEntity userEntity) {
         return UserDto.builder()
                 .userId(userEntity.getUserId())
+                .account(userEntity.getAccount())
                 .email(userEntity.getEmail())
-                .password(userEntity.getPassword())
+                .currency(userEntity.getCurrency())
                 .build();
     }
 }

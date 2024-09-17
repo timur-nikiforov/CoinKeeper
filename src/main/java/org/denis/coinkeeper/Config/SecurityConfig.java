@@ -52,10 +52,10 @@ public class SecurityConfig {
                 .authorizeHttpRequests((auth) ->
                         auth.requestMatchers("/****").authenticated()
                                 .requestMatchers("/api/main/register").permitAll()
+                                .requestMatchers("/error").permitAll()
                                 .anyRequest().authenticated())
                 .formLogin(AbstractAuthenticationFilterConfigurer::permitAll)
                 .httpBasic(withDefaults());
-        
         return http.build();
     }
 }
