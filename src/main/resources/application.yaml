@@ -13,5 +13,16 @@ spring:
     driver-class-name: org.postgresql.Driver
 
   jpa:
-    hibernate:
     show-sql: true
+    properties:
+      hibernate:
+        boot:
+          allow_jdbc_metadata_access: false
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+
+
+  flyway:
+    locations: classpath:/db/migrations
+    enabled: true
+    baseline-on-migrate: true
+
