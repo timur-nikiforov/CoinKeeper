@@ -36,15 +36,10 @@ public class UserEntity {
     @OneToMany
     //referencedColumnName - указываем название поля в java, а если есть @Column, то что внутри
     @JoinColumn(name = "user_id",referencedColumnName = "userId")
-    private List<ProfitEntity> profitEntityList = new ArrayList<>();
+    private List<ProfitEntity> profitList = new ArrayList<>();
 
     @Builder.Default
     @OneToMany
     @JoinColumn(name = "user_id",referencedColumnName = "userId")
     private List<ExpensesEntity> expensesList = new ArrayList<>();
-
-//    @OneToOne
-//    @JoinColumn(name = "user", referencedColumnName = "userId")
-//    private UserEntity user;
-
 }

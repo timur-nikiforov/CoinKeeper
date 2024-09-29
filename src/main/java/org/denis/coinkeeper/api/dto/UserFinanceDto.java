@@ -6,9 +6,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.denis.coinkeeper.api.entities.CurrencyEntity;
-import org.denis.coinkeeper.api.entities.ExpensesEntity;
-import org.denis.coinkeeper.api.entities.ProfitEntity;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
@@ -18,15 +15,12 @@ import java.util.List;
 @Component
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserDto {
+public class UserFinanceDto {
 
-    @JsonProperty("user_id")
-    private Long userId;
+    @JsonProperty("profit")
+    private List<ProfitDto> profitEntityList;
 
-    private Long account;
-
-    private String email;
-
-    private CurrencyDto currency;
+    @JsonProperty("expenses")
+    private List<ExpensesDto> expensesEntityList;
 
 }
