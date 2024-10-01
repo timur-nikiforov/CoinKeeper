@@ -22,7 +22,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
@@ -45,12 +44,21 @@ public class UserService {
     @Transactional
     public UserEntity register(UserAuthDto userAuthDto) {
 
-        UserEntity userEntity = UserEntity.builder()
-                .email(userAuthDto.getEmail())
-                .password(passwordEncoder.encode(userAuthDto.getPassword()))
-                .build();
+        String currencyDefault = "RUB";
+        Optional<CurrencyEntity> currencyEntityOptional = currencyRepository.findByCurrencyName(currencyDefault);
+        if (currencyEntityOptional.isPresent()) {
 
-        return userRepository.save(userEntity);
+            UserEntity userEntity = UserEntity.builder()
+                    .email(userAuthDto.getEmail())
+                    .password(passwordEncoder.encode(userAuthDto.getPassword()))
+                    .currency(currencyEntityOptional.get())
+                    .build();
+
+            return userRepository.save(userEntity);
+        }
+        else {
+            throw new BadRequestException("Server Error with Currency");
+        }
     }
 
 
@@ -95,6 +103,17 @@ public class UserService {
                 .toList();
     }
 
+
+    @Transactional
+    public void removeUser(String email) {
+        Optional<UserEntity> userEntity = userRepository.findByEmail(email);
+        if (userEntity.isPresent()) {
+            userRepository.delete(userEntity.get());
+        }
+        else {
+            throw new BadRequestException("this user not found");
+        }
+    }
     public UserFinanceDto getFinanceUser(String email) {
 
 

@@ -9,8 +9,10 @@ public class ExpensesDtoFactory {
 
     public ExpensesDto makeExpensesDto(ExpensesEntity expensesEntity) {
         return ExpensesDto.builder()
+                .name(expensesEntity.getName())
                 .expensesId(expensesEntity.getExpensesId())
                 .price(expensesEntity.getPrice())
+                .userId(expensesEntity.getUser().getUserId())
                 .category(expensesEntity.getCategory())
                 .AddedAt(expensesEntity.getAddedAt())
                 .build();

@@ -1,6 +1,7 @@
 package org.denis.coinkeeper.api.entities;
 
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Null;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -14,8 +15,8 @@ import java.util.List;
 @Entity
 @Table(name = "users")
 public class UserEntity {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+
+    @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userId;
 
     @Column
@@ -33,13 +34,38 @@ public class UserEntity {
     private CurrencyEntity currency;
 
     @Builder.Default
-    @OneToMany
-    //referencedColumnName - указываем название поля в java, а если есть @Column, то что внутри
-    @JoinColumn(name = "user_id",referencedColumnName = "userId")
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private List<ProfitEntity> profitList = new ArrayList<>();
 
     @Builder.Default
-    @OneToMany
-    @JoinColumn(name = "user_id",referencedColumnName = "userId")
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private List<ExpensesEntity> expensesList = new ArrayList<>();
+
+
+    public void addProfit(ProfitEntity profitEntity) {
+        profitList.add(profitEntity);
+        profitEntity.setUser(this);
+    }
+
+    public void removeProfit(ProfitEntity profitEntity) {
+        profitList.remove(profitEntity);
+        profitEntity.setUser(null);
+    }
+
+    public void addExpenses(ExpensesEntity expensesEntity) {
+        expensesList.add(expensesEntity);
+        expensesEntity.setUser(this);
+    }
+
+    public void removeExpenses(ExpensesEntity expensesEntity) {
+        expensesList.remove(expensesEntity);
+        expensesEntity.setUser(null);
+    }
+
 }
+//referencedColumnName - указываем название поля в java, а если есть @Column, то что внутри
+//@JoinColumn(name = "user_id",referencedColumnName = "userId")

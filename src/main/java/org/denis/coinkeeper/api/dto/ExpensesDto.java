@@ -5,6 +5,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,13 +20,19 @@ import java.time.Instant;
 @NoArgsConstructor
 public class ExpensesDto {
 
-    @JsonProperty("expenses_id")
+    @Null
     private Long expensesId;
+
+    private String name;
 
     private String category;
 
     private Long price;
 
-    @JsonProperty("added_at")
-    private Instant AddedAt;
+    @Null
+    private Long userId;
+
+    @Null
+    @Builder.Default
+    private Instant AddedAt = Instant.now();
 }

@@ -17,6 +17,13 @@ public class ExpensesEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long expensesId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
+
+    @Column
+    private String name;
+
     @Column
     private String category;
 

@@ -2,6 +2,7 @@ package org.denis.coinkeeper.api.dto;
 
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.Null;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,7 +21,7 @@ import java.util.List;
 @NoArgsConstructor
 public class UserDto {
 
-    @JsonProperty("user_id")
+    @Null
     private Long userId;
 
     private Long account;

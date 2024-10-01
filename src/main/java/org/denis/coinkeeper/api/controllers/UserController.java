@@ -27,19 +27,14 @@ import java.util.List;
 @RestController
 public class UserController {
 
-    private final UserDtoFactory userDtoFactory;
-    private final UserRepository userRepository;
 
     private final UserService userService;
     private final CurrencyService currencyService;
 
-    private final CurrencyRepository currencyRepository;
-    private final CurrencyDtoFactory currencyDtoFactory;
-
-    public static final String CURRENCY_API_ENDPOINT = "/api/currency";
-    public static final String ACCOUNT_API_ENDPOINT = "/api/account";
+    public static final String CURRENCIES_API_ENDPOINT = "/api/currency";
 
     public static final String USER_API_ENDPOINT = "/api/user";
+    public static final String REMOVE_USER_API_ENDPOINT = "/api/user/remove";
     public static final String USER_EDIT_API_ENDPOINT = "/api/user/edit";
     public static final String USERS_API_ENDPOINT = "/api/users";
     public static final String REGISTER_API_ENDPOINT = "/api/register";
@@ -52,14 +47,15 @@ public class UserController {
         if (bindingResult.hasErrors()) {
             throw new BindException(bindingResult);
         }
+
         UserEntity userEntity = userService.register(userAuthDto);
 
         return ResponseEntity
-                .created(URI.create(CURRENCY_API_ENDPOINT))
+                .created(URI.create(CURRENCIES_API_ENDPOINT))
                 .body(userEntity);
     }
 
-    @GetMapping(CURRENCY_API_ENDPOINT)
+    @GetMapping(CURRENCIES_API_ENDPOINT)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<List<CurrencyDto>> getCurrencyPage() {
 
@@ -83,6 +79,18 @@ public class UserController {
                         .userFinanceDto(userFinance)
                         .build());
     }
+
+//    @DeleteMapping(REMOVE_USER_API_ENDPOINT)
+//    @ResponseStatus(HttpStatus.NO_CONTENT)
+//    public ResponseEntity<?> deleteUser(Authentication authorization) {
+//        String email = authorization.getName();
+//
+//        userService.removeUser(email);
+//
+//        return ResponseEntity
+//                .noContent();
+//    }
+
     @PatchMapping(USER_EDIT_API_ENDPOINT)
     public ResponseEntity<?> editUserProfile(@RequestBody UserDto userDto,
                                              Authentication authorization) {

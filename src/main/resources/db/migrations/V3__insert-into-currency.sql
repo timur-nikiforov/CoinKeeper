@@ -1,5 +1,5 @@
 insert into currency(currency_name, currency_description)
-values('RUB', 'Рубли — денежная единица России');
+values('RUB', 'Рубль — денежная единица России');
 
 insert into currency(currency_name, currency_description)
 values('USD', 'Доллар — денежная единица США');

@@ -9,8 +9,10 @@ public class ProfitDtoFactory {
 
     public ProfitDto makeProfitDto(ProfitEntity profitEntity) {
         return ProfitDto.builder()
+                .name(profitEntity.getName())
                 .profitId(profitEntity.getProfitId())
                 .price(profitEntity.getPrice())
+                .userId(profitEntity.getUser().getUserId())
                 .category(profitEntity.getCategory())
                 .AddedAt(profitEntity.getAddedAt())
                 .build();

@@ -17,6 +17,13 @@ public class ProfitEntity {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long profitId;
 
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private UserEntity user;
+
+    @Column
+    private String name;
+
     @Column
     private String category;
 
