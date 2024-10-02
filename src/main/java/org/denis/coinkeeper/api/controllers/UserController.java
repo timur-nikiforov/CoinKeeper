@@ -6,17 +6,14 @@ import lombok.RequiredArgsConstructor;
 import org.denis.coinkeeper.api.Services.CurrencyService;
 import org.denis.coinkeeper.api.Services.UserService;
 import org.denis.coinkeeper.api.dto.*;
-import org.denis.coinkeeper.api.entities.CurrencyEntity;
 import org.denis.coinkeeper.api.entities.UserEntity;
-import org.denis.coinkeeper.api.factories.CurrencyDtoFactory;
-import org.denis.coinkeeper.api.factories.UserDtoFactory;
-import org.denis.coinkeeper.api.repositories.CurrencyRepository;
-import org.denis.coinkeeper.api.repositories.UserRepository;
+import org.denis.coinkeeper.api.exceptions.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
@@ -42,10 +39,14 @@ public class UserController {
     @PostMapping(REGISTER_API_ENDPOINT)
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UserEntity> register(@RequestBody @Valid UserAuthDto userAuthDto,
-                                               BindingResult bindingResult) throws BindException {
+                                               BindingResult bindingResult){
 
         if (bindingResult.hasErrors()) {
-            throw new BindException(bindingResult);
+            //throw new BindException(bindingResult);
+            throw new BadRequestException(bindingResult
+                    .getAllErrors().stream()
+                    .map(ObjectError::getDefaultMessage)
+                    .toList());
         }
 
         UserEntity userEntity = userService.register(userAuthDto);

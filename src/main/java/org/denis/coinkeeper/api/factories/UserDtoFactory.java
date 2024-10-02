@@ -2,10 +2,8 @@ package org.denis.coinkeeper.api.factories;
 
 import lombok.RequiredArgsConstructor;
 import org.denis.coinkeeper.api.dto.CurrencyDto;
-import org.denis.coinkeeper.api.dto.ProfitDto;
 import org.denis.coinkeeper.api.dto.UserDto;
 import org.denis.coinkeeper.api.dto.UserFinanceDto;
-import org.denis.coinkeeper.api.entities.ProfitEntity;
 import org.denis.coinkeeper.api.entities.UserEntity;
 import org.springframework.stereotype.Component;
 

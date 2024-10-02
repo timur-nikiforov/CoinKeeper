@@ -1,16 +1,13 @@
 package org.denis.coinkeeper.api.Services;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.denis.coinkeeper.api.dto.ExpensesDto;
-import org.denis.coinkeeper.api.dto.ProfitDto;
 import org.denis.coinkeeper.api.entities.ExpensesEntity;
-import org.denis.coinkeeper.api.entities.ProfitEntity;
 import org.denis.coinkeeper.api.entities.UserEntity;
 import org.denis.coinkeeper.api.exceptions.BadRequestException;
 import org.denis.coinkeeper.api.factories.ExpensesDtoFactory;
-import org.denis.coinkeeper.api.factories.ProfitDtoFactory;
 import org.denis.coinkeeper.api.repositories.ExpensesRepository;
-import org.denis.coinkeeper.api.repositories.ProfitRepository;
 import org.denis.coinkeeper.api.repositories.UserRepository;
 import org.springframework.stereotype.Service;
 
@@ -25,6 +22,7 @@ public class ExpensesService {
 
     private final UserRepository userRepository;
 
+    @Transactional
     public void createExpenses(ExpensesDto expensesDto, String email) {
 
         Optional<UserEntity> userEntityOptional = userRepository.findByEmail(email);
@@ -78,6 +76,7 @@ public class ExpensesService {
 
     }
 
+    @Transactional
     public ExpensesDto patchExpenses(Long expensesId,
                                  ExpensesDto expensesDto,
                                  String email) {
@@ -118,6 +117,7 @@ public class ExpensesService {
         }
 
     }
+    @Transactional
     public void removeExpensesById(Long expensesId,
                                  String email) {
         Optional<UserEntity> userEntityOptional = userRepository.findByEmail(email);

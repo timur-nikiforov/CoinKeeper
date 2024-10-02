@@ -2,12 +2,13 @@ package org.denis.coinkeeper.api.Services;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.denis.coinkeeper.api.dto.*;
+import org.denis.coinkeeper.api.dto.UserAuthDto;
+import org.denis.coinkeeper.api.dto.UserDto;
+import org.denis.coinkeeper.api.dto.UserFinanceDto;
 import org.denis.coinkeeper.api.entities.CurrencyEntity;
-import org.denis.coinkeeper.api.entities.ExpensesEntity;
-import org.denis.coinkeeper.api.entities.ProfitEntity;
 import org.denis.coinkeeper.api.entities.UserEntity;
 import org.denis.coinkeeper.api.exceptions.BadRequestException;
+import org.denis.coinkeeper.api.exceptions.ServerErrorException;
 import org.denis.coinkeeper.api.factories.CurrencyDtoFactory;
 import org.denis.coinkeeper.api.factories.ExpensesDtoFactory;
 import org.denis.coinkeeper.api.factories.ProfitDtoFactory;
@@ -57,7 +58,7 @@ public class UserService {
             return userRepository.save(userEntity);
         }
         else {
-            throw new BadRequestException("Server Error with Currency");
+            throw new ServerErrorException("Server Error with Currency");
         }
     }
 
@@ -106,28 +107,22 @@ public class UserService {
 
     @Transactional
     public void removeUser(String email) {
-        Optional<UserEntity> userEntity = userRepository.findByEmail(email);
-        if (userEntity.isPresent()) {
-            userRepository.delete(userEntity.get());
+        Optional<UserEntity> userEntityOptional = userRepository.findByEmail(email);
+        if (userEntityOptional.isPresent()) {
+            userRepository.delete(userEntityOptional.get());
         }
         else {
             throw new BadRequestException("this user not found");
         }
     }
+
     public UserFinanceDto getFinanceUser(String email) {
-
-
-         List<ProfitEntity> profitList = profitRepository.getProfitList(email);
-         List<ExpensesEntity> expensesList = expensesRepository.getExpensesList(email);
-         return UserFinanceDto.builder()
-                 .profitEntityList(profitList
-                         .stream()
-                         .map(profitDtoFactory::makeProfitDto)
-                         .toList())
-                 .expensesEntityList(expensesList
-                         .stream()
-                         .map(expensesDtoFactory::makeExpensesDto)
-                         .toList())
-                 .build();
+        Optional<UserEntity> userEntityOptional = userRepository.findByEmail(email);
+        if (userEntityOptional.isPresent()) {
+            return userDtoFactory.makeFinanceDto(userEntityOptional.get());
+        }
+        else {
+            throw new BadRequestException("this user not found");
+        }
     }
 }

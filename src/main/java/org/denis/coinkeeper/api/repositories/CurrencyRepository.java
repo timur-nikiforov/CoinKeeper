@@ -4,7 +4,6 @@ import org.denis.coinkeeper.api.entities.CurrencyEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Currency;
 import java.util.Optional;
 import java.util.stream.Stream;
 

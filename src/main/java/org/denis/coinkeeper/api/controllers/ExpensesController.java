@@ -1,6 +1,5 @@
 package org.denis.coinkeeper.api.controllers;
 
-import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.denis.coinkeeper.api.Services.ExpensesService;
 import org.denis.coinkeeper.api.dto.ExpensesDto;
@@ -13,7 +12,6 @@ import java.net.URI;
 import java.util.List;
 
 @RequiredArgsConstructor
-@Transactional
 @RestController
 public class ExpensesController {
 

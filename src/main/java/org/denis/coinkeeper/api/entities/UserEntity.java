@@ -1,7 +1,6 @@
 package org.denis.coinkeeper.api.entities;
 
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Null;
 import lombok.*;
 
 import java.util.ArrayList;

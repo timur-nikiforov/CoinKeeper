@@ -1,5 +1,6 @@
 package org.denis.coinkeeper.api.Services;
 
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.denis.coinkeeper.api.dto.ProfitDto;
 import org.denis.coinkeeper.api.entities.ProfitEntity;
@@ -23,6 +24,7 @@ public class ProfitService {
 
     private final UserRepository userRepository;
 
+    @Transactional
     public void createProfit(ProfitDto profitDto,String email) {
 
         Optional<UserEntity> userEntityOptional = userRepository.findByEmail(email);
@@ -76,6 +78,7 @@ public class ProfitService {
 
     }
 
+    @Transactional
     public ProfitDto patchProfit(Long profitId,
                                  ProfitDto profitDto,
                                  String email) {
@@ -116,6 +119,7 @@ public class ProfitService {
         }
 
     }
+    @Transactional
     public void removeProfitById(Long profitId,
                                    String email) {
         Optional<UserEntity> userEntityOptional = userRepository.findByEmail(email);
