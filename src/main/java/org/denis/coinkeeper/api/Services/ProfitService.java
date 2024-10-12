@@ -9,7 +9,6 @@ import org.denis.coinkeeper.api.exceptions.BadRequestException;
 import org.denis.coinkeeper.api.factories.ProfitDtoFactory;
 import org.denis.coinkeeper.api.repositories.ProfitRepository;
 import org.denis.coinkeeper.api.repositories.UserRepository;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -79,9 +78,9 @@ public class ProfitService {
     }
 
     @Transactional
-    public ProfitDto patchProfit(Long profitId,
-                                 ProfitDto profitDto,
-                                 String email) {
+    public ProfitDto putProfit(Long profitId,
+                               ProfitDto profitDto,
+                               String email) {
         Optional<UserEntity> userEntityOptional = userRepository.findByEmail(email);
         if (userEntityOptional.isPresent()) {
 

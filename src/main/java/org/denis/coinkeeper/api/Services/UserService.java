@@ -1,10 +1,16 @@
 package org.denis.coinkeeper.api.Services;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.denis.coinkeeper.api.dto.UserAuthDto;
 import org.denis.coinkeeper.api.dto.UserDto;
 import org.denis.coinkeeper.api.dto.UserFinanceDto;
+import org.denis.coinkeeper.api.dto.UserSummaryDto;
 import org.denis.coinkeeper.api.entities.CurrencyEntity;
 import org.denis.coinkeeper.api.entities.UserEntity;
 import org.denis.coinkeeper.api.exceptions.BadRequestException;
@@ -43,7 +49,7 @@ public class UserService {
 
 
     @Transactional
-    public UserEntity register(UserAuthDto userAuthDto) {
+    public UserSummaryDto register(UserAuthDto userAuthDto) {
 
         String currencyDefault = "RUB";
         Optional<CurrencyEntity> currencyEntityOptional = currencyRepository.findByCurrencyName(currencyDefault);
@@ -55,8 +61,23 @@ public class UserService {
                     .currency(currencyEntityOptional.get())
                     .build();
 
-            return userRepository.save(userEntity);
+            Optional<UserEntity> userEntityOptional = userRepository.findByEmail(userAuthDto.getEmail());
+            if (userEntityOptional.isEmpty()) {
+
+                UserEntity resultEntity = userRepository.save(userEntity);
+                UserDto userDto = userDtoFactory.makeUserDto(resultEntity);
+
+                UserFinanceDto userFinanceDto = userDtoFactory.makeFinanceDto(resultEntity);
+                return UserSummaryDto.builder()
+                        .userDto(userDto)
+                        .userFinanceDto(userFinanceDto)
+                        .build();
+            }
+            else {
+                throw new BadRequestException("User already exists");
+            }
         }
+
         else {
             throw new ServerErrorException("Server Error with Currency");
         }
@@ -64,28 +85,31 @@ public class UserService {
 
 
     @Transactional
-    public void patchUser(String email,
-                          UserDto userDto) {
+    public UserDto putUser(String email , UserDto userDto) {
 
         Optional<UserEntity> userEntity = userRepository.findByEmail(email);
+        if (userEntity.isPresent()) {
+            UserEntity userEntity1 = userEntity.get();
 
-        UserEntity userEntity1 = userEntity.get();
+            Optional<CurrencyEntity> currencyEntity = currencyRepository.findByCurrencyName(userDto.getCurrency().getCurrencyName());
 
-        Optional<CurrencyEntity> currencyEntity = currencyRepository.findByCurrencyName(userDto.getCurrency().getCurrencyName());
+            if (currencyEntity.isEmpty())
+                throw new BadRequestException(String.format("The currency \"%s\" does not exist", userDto.getCurrency().getCurrencyName()));
 
-        if (currencyEntity.isEmpty())
-            throw new BadRequestException(String.format("The currency \"%s\" does not exist",userDto.getCurrency().getCurrencyName()));
-
-        if (!userEntity1.getEmail().equals(userDto.getEmail())) {
-            userEntity1.setEmail(userDto.getEmail());
+            if (!userEntity1.getEmail().equals(userDto.getEmail())) {
+                userEntity1.setEmail(userDto.getEmail());
+            }
+            if (!userEntity1.getCurrency().equals(currencyEntity.get())) {
+                userEntity1.setCurrency(currencyEntity.get());
+            }
+            if (!userEntity1.getAccount().equals(userDto.getAccount())) {
+                userEntity1.setAccount(userDto.getAccount());
+            }
+            return userDtoFactory.makeUserDto(userRepository.save(userEntity1));
         }
-        if (!userEntity1.getCurrency().equals(currencyEntity.get())) {
-            userEntity1.setCurrency(currencyEntity.get());
+        else {
+            throw new BadRequestException("User already exists");
         }
-        if (!userEntity1.getAccount().equals(userDto.getAccount())) {
-            userEntity1.setAccount(userDto.getAccount());
-        }
-        userRepository.save(userEntity1);
     }
 
     public UserDto getUser(String email) {

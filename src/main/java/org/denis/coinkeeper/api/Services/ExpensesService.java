@@ -77,7 +77,7 @@ public class ExpensesService {
     }
 
     @Transactional
-    public ExpensesDto patchExpenses(Long expensesId,
+    public ExpensesDto putExpenses(Long expensesId,
                                  ExpensesDto expensesDto,
                                  String email) {
         Optional<UserEntity> userEntityOptional = userRepository.findByEmail(email);

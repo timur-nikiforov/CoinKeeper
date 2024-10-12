@@ -45,14 +45,14 @@ public class ProfitController {
 
     }
 
-    @PatchMapping(PROFIT_API_ENDPOINT)
+    @PutMapping(PROFIT_API_ENDPOINT)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ProfitDto> patchProfit(@RequestBody ProfitDto profitDto,
-                                                 @PathVariable("id") Long profitId,
-                                                 Authentication authorization) {
+    public ResponseEntity<ProfitDto> putProfit(@RequestBody ProfitDto profitDto,
+                                               @PathVariable("id") Long profitId,
+                                               Authentication authorization) {
         String email = authorization.getName();
 
-        ProfitDto profitDtoResult = profitService.patchProfit(profitId,profitDto,email);
+        ProfitDto profitDtoResult = profitService.putProfit(profitId,profitDto,email);
 
         return ResponseEntity
                 .ok(profitDtoResult);

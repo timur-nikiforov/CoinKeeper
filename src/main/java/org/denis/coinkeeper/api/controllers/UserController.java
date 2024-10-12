@@ -6,12 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.denis.coinkeeper.api.Services.CurrencyService;
 import org.denis.coinkeeper.api.Services.UserService;
 import org.denis.coinkeeper.api.dto.*;
-import org.denis.coinkeeper.api.entities.UserEntity;
 import org.denis.coinkeeper.api.exceptions.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.validation.BindException;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +22,6 @@ import java.util.List;
 @RestController
 public class UserController {
 
-
     private final UserService userService;
     private final CurrencyService currencyService;
 
@@ -36,24 +33,23 @@ public class UserController {
     public static final String USERS_API_ENDPOINT = "/api/users";
     public static final String REGISTER_API_ENDPOINT = "/api/register";
 
+
     @PostMapping(REGISTER_API_ENDPOINT)
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<UserEntity> register(@RequestBody @Valid UserAuthDto userAuthDto,
+    public ResponseEntity<UserSummaryDto> register(@RequestBody @Valid UserAuthDto userAuthDto,
                                                BindingResult bindingResult){
-
         if (bindingResult.hasErrors()) {
-            //throw new BindException(bindingResult);
             throw new BadRequestException(bindingResult
                     .getAllErrors().stream()
                     .map(ObjectError::getDefaultMessage)
                     .toList());
         }
 
-        UserEntity userEntity = userService.register(userAuthDto);
+        UserSummaryDto userSummaryDto = userService.register(userAuthDto);
 
         return ResponseEntity
                 .created(URI.create(CURRENCIES_API_ENDPOINT))
-                .body(userEntity);
+                .body(userSummaryDto);
     }
 
     @GetMapping(CURRENCIES_API_ENDPOINT)
@@ -81,23 +77,13 @@ public class UserController {
                         .build());
     }
 
-//    @DeleteMapping(REMOVE_USER_API_ENDPOINT)
-//    @ResponseStatus(HttpStatus.NO_CONTENT)
-//    public ResponseEntity<?> deleteUser(Authentication authorization) {
-//        String email = authorization.getName();
-//
-//        userService.removeUser(email);
-//
-//        return ResponseEntity
-//                .noContent();
-//    }
 
-    @PatchMapping(USER_EDIT_API_ENDPOINT)
-    public ResponseEntity<?> editUserProfile(@RequestBody UserDto userDto,
+    @PutMapping(USER_EDIT_API_ENDPOINT)
+    public ResponseEntity<?> putUserProfile(@RequestBody UserDto userDto,
                                              Authentication authorization) {
         String email = authorization.getName();
 
-        userService.patchUser(email,userDto);
+        userService.putUser(email,userDto);
 
         return ResponseEntity
                 .noContent()
@@ -111,6 +97,17 @@ public class UserController {
         List<UserDto> userDtoList = userService.getUsers();
         return ResponseEntity
                 .ok(userDtoList);
+    }
+    @DeleteMapping(REMOVE_USER_API_ENDPOINT)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public ResponseEntity<?> deleteUser(Authentication authorization) {
+        String email = authorization.getName();
+
+        userService.removeUser(email);
+
+        return ResponseEntity
+                .noContent()
+                .build();
     }
 //
 //    @PostMapping(CURRENCY_API_ENDPOINT)

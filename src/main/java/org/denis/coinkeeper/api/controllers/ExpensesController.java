@@ -25,7 +25,7 @@ public class ExpensesController {
 
     @PostMapping(CREATE_EXPENSES_API_ENDPOINT)
     @ResponseStatus(HttpStatus.OK)
-    ResponseEntity<?> createProfit(@RequestBody ExpensesDto expensesDto,
+    ResponseEntity<?> createExpenses(@RequestBody ExpensesDto expensesDto,
                                            Authentication authorization) {
         String email = authorization.getName();
 
@@ -37,7 +37,7 @@ public class ExpensesController {
     }
     @GetMapping(ALL_EXPENSES_API_ENDPOINT)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<List<ExpensesDto>> getProfits(Authentication authorization) {
+    public ResponseEntity<List<ExpensesDto>> getAllExpenses(Authentication authorization) {
         String email = authorization.getName();
 
         return ResponseEntity
@@ -45,14 +45,14 @@ public class ExpensesController {
 
     }
 
-    @PatchMapping(EXPENSES_API_ENDPOINT)
+    @PutMapping(EXPENSES_API_ENDPOINT)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ExpensesDto> patchProfit(@RequestBody ExpensesDto expensesDto,
+    public ResponseEntity<ExpensesDto> putExpenses(@RequestBody ExpensesDto expensesDto,
                                                  @PathVariable("id") Long expensesId,
                                                  Authentication authorization) {
         String email = authorization.getName();
 
-        ExpensesDto expensesDtoResult = expensesService.patchExpenses(expensesId,expensesDto,email);
+        ExpensesDto expensesDtoResult = expensesService.putExpenses(expensesId,expensesDto,email);
 
         return ResponseEntity
                 .ok(expensesDtoResult);
@@ -61,7 +61,7 @@ public class ExpensesController {
 
     @GetMapping(EXPENSES_API_ENDPOINT)
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<ExpensesDto> getProfit(@PathVariable("id") Long expensesId,
+    public ResponseEntity<ExpensesDto> getExpenses(@PathVariable("id") Long expensesId,
                                                Authentication authorization) {
         String email = authorization.getName();
 
@@ -71,7 +71,7 @@ public class ExpensesController {
     }
     @DeleteMapping(EXPENSES_API_ENDPOINT)
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public ResponseEntity<?> removeProfit(@PathVariable("id") Long expensesId,
+    public ResponseEntity<?> removeExpenses(@PathVariable("id") Long expensesId,
                                           Authentication authorization) {
         String email = authorization.getName();
         expensesService.removeExpensesById(expensesId,email);
